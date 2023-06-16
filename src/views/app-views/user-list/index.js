@@ -5,6 +5,7 @@ import moment from 'moment';
 import UserView from './UserView';
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import userData from "assets/data/user-list.data.json";
+import EditProfile from "../setting/EditProfile";
 
 export class UserList extends Component {
 
@@ -98,7 +99,8 @@ export class UserList extends Component {
 		return (
 			<Card bodyStyle={{'padding': '0px'}}>
 				<Table columns={tableColumns} dataSource={users} rowKey='id' />
-				<UserView data={selectedUser} visible={userProfileVisible} close={()=> {this.closeUserProfile()}}/>
+				{/*<UserView data={selectedUser} visible={userProfileVisible} close={()=> {this.closeUserProfile()}}/>*/}
+				<EditProfile data={selectedUser} visible={userProfileVisible} close={()=> {this.closeUserProfile()}}/>
 			</Card>
 		)
 	}
