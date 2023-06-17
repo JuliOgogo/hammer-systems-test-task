@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button, Card, message, Table, Tooltip} from 'antd';
-import {DeleteOutlined, EyeOutlined} from '@ant-design/icons';
+import {DeleteOutlined} from '@ant-design/icons';
 import EditProfile from "../setting/EditProfile";
 import {connect} from "react-redux";
 import {getUsers} from "../../../redux/thunks/usersReducer";
@@ -102,10 +102,10 @@ export class UserList extends Component {
                 dataIndex: 'actions',
                 render: (_, elm) => (
                     <div className="text-right">
-                        <Tooltip title="View">
-                            <Button type="primary" className="mr-2" icon={<EyeOutlined/>} onClick={() => {
+                        <Tooltip title="Edit profile">
+                            <Button type="primary" className="mr-2" onClick={() => {
                                 this.showUserProfile(elm)
-                            }} size="small"/>
+                            }} size="small">Edit profile</Button>
                         </Tooltip>
                         <Tooltip title="Delete">
                             <Button danger icon={<DeleteOutlined/>} onClick={() => {

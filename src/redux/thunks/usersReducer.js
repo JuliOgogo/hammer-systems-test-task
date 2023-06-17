@@ -28,12 +28,16 @@ export const setUsers = (users) => ({type: SET_USERS, users})
 export const toggleIsFetching = (value) => ({type: TOGGLE_IS_FETCHING, value})
 
 export const getUsers = () => async (dispatch) => {
-    dispatch(toggleIsFetching(true))
+    try {
+        dispatch(toggleIsFetching(true))
 
-    const data = await usersAPI.getUsers()
+        const data = await usersAPI.getUsers()
 
-    dispatch(toggleIsFetching(false))
-    dispatch(setUsers(data))
+        dispatch(setUsers(data))
+        dispatch(toggleIsFetching(false))
+    } catch (e) {
+        alert('something went wrong')
+    }
 }
 
 const SET_USERS = 'users/SET_USERS'
