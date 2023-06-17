@@ -1,17 +1,21 @@
 import React, {Component} from 'react'
-import {Button, Card, message, Table, Tag, Tooltip} from 'antd';
+import {Button, Card, message, Table, Tooltip} from 'antd';
 import {DeleteOutlined, EyeOutlined} from '@ant-design/icons';
-import moment from 'moment';
-import AvatarStatus from 'components/shared-components/AvatarStatus';
-import userData from "assets/data/user-list.data.json";
 import EditProfile from "../setting/EditProfile";
+import {connect} from "react-redux";
+import {getUsers} from "../../../redux/thunks/usersReducer";
+import Loading from "../../../components/shared-components/Loading";
 
 export class UserList extends Component {
 
     state = {
-        users: userData,
+        users: this.props.users,
         userProfileVisible: false,
         selectedUser: null
+    }
+
+    componentDidMount() {
+        this.props.getUsers()
     }
 
     deleteUser = userId => {
@@ -36,17 +40,14 @@ export class UserList extends Component {
     }
 
     render() {
+
         const {users, userProfileVisible, selectedUser} = this.state;
+        console.log(users)
 
         const tableColumns = [
             {
                 title: 'User',
                 dataIndex: 'name',
-                render: (_, record) => (
-                    <div className="d-flex">
-                        <AvatarStatus src={record.img} name={record.name} subTitle={record.email}/>
-                    </div>
-                ),
                 sorter: {
                     compare: (a, b) => {
                         a = a.name.toLowerCase();
@@ -56,28 +57,36 @@ export class UserList extends Component {
                 },
             },
             {
-                title: 'Role',
-                dataIndex: 'role',
+                title: 'Username',
+                dataIndex: 'username',
                 sorter: {
-                    compare: (a, b) => a.role.length - b.role.length,
+                    compare: (a, b) => {
+                        a = a.username.toLowerCase();
+                        b = b.username.toLowerCase();
+                        return a > b ? -1 : b > a ? 1 : 0;
+                    },
                 },
             },
             {
-                title: 'Last online',
-                dataIndex: 'lastOnline',
-                render: date => (
-                    <span>{moment.unix(date).format("MM/DD/YYYY")} </span>
-                ),
-                sorter: (a, b) => moment(a.lastOnline).unix() - moment(b.lastOnline).unix()
+                title: 'Phone',
+                dataIndex: 'phone',
+                sorter: {
+                    compare: (a, b) => {
+                        a = a.phone.toLowerCase();
+                        b = b.phone.toLowerCase();
+                        return a > b ? -1 : b > a ? 1 : 0;
+                    },
+                },
             },
             {
-                title: 'Status',
-                dataIndex: 'status',
-                render: status => (
-                    <Tag className="text-capitalize" color={status === 'active' ? 'cyan' : 'red'}>{status}</Tag>
-                ),
+                title: 'Website',
+                dataIndex: 'website',
                 sorter: {
-                    compare: (a, b) => a.status.length - b.status.length,
+                    compare: (a, b) => {
+                        a = a.website.toLowerCase();
+                        b = b.website.toLowerCase();
+                        return a > b ? -1 : b > a ? 1 : 0;
+                    },
                 },
             },
             {
@@ -101,8 +110,10 @@ export class UserList extends Component {
         ];
         return (
             <Card bodyStyle={{'padding': '0px'}}>
+
+                {this.props.isFetching ? <Loading/> : null}
+
                 <Table columns={tableColumns} dataSource={users} rowKey='id'/>
-                {/*<UserView data={selectedUser} visible={userProfileVisible} close={()=> {this.closeUserProfile()}}/>*/}
 
                 {this.state.userProfileVisible ?
                     <EditProfile data={selectedUser} visible={userProfileVisible} close={() => {
@@ -114,4 +125,11 @@ export class UserList extends Component {
     }
 }
 
-export default UserList
+const mapStateToProps = (state) => {
+    return {
+        users: state.users.users,
+        isFetching: state.users.isFetching
+    }
+}
+
+export default connect(mapStateToProps, {getUsers})(UserList)
