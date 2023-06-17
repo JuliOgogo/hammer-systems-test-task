@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
-import {Card, Table, Tag, Tooltip, message, Button} from 'antd';
-import {EyeOutlined, DeleteOutlined} from '@ant-design/icons';
+import {Button, Card, message, Table, Tag, Tooltip} from 'antd';
+import {DeleteOutlined, EyeOutlined} from '@ant-design/icons';
 import moment from 'moment';
-import UserView from './UserView';
 import AvatarStatus from 'components/shared-components/AvatarStatus';
 import userData from "assets/data/user-list.data.json";
 import EditProfile from "../setting/EditProfile";
