@@ -18,6 +18,14 @@ export class UserList extends Component {
         this.props.getUsers()
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.users !== this.props.users) {
+            this.setState({
+                users: this.props.users
+            })
+        }
+    }
+
     deleteUser = userId => {
         this.setState({
             users: this.state.users.filter(item => item.id !== userId),
